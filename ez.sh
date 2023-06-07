@@ -119,7 +119,7 @@ fi
 cp $HOME/asgs/cloud/VirtualBox/oracle-linux-8.7/default.asgs-global.conf $HOME/asgs-global.conf
 cp $HOME/asgs/cloud/VirtualBox/oracle-linux-8.7/dot.tmux.conf $HOME/.tmux.conf
 
-chmod 600 /home/asgs/asgs-global.conf
+chmod 600 $HOME/asgs-global.conf
 
 echo<<EOF
 Thank you for bootstrapping ASGS on Ubuntu (stretch)!
