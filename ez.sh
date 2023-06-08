@@ -8,22 +8,43 @@ assert_system_req() {
 assert_system_req
 
 echo
-read -p "This script downloads and installs ASGS in $HOME/asgs. Continue [y/N]? " continue
+read -p "This script downloads and installs ASGS after getting some more info from you. Continue [y/N]? " continue
 if [[ -z "$continue" || "$continue" == "N" ]]; then
   echo ASGS bootstrap cancelled.
   exit 1
 fi
 
-cd $HOME && git clone https://github.com/StormSurgeLive/asgs.git && cd $HOME/asgs && git checkout master
+_SCRIPTDIR=$HOME/asgs
+read -p "Where do you want to install ASGS [$_SCRIPTDIR]? " SCRIPTDIR 
+if [ -z "$SCRIPTDIR" ]; then
+  SCRIPTDIR=$_SCRIPTDIR
+fi
+export SCRIPTDIR
 
-/home/asgs
+_SCRATCH=$HOME/scratch
+read -p "Enter in path to your SCRATCH directory [$_SCRATCH]: " SCRATCH 
+if [ -z "$SCRATCH" ]; then
+  SCRATCH=$_SCRATCH
+fi
+export SCRATCH
+
+read -p "Enter in path to your WORK directory [$SCRATCH]: " WORK
+if [ -z "$WORK" ]; then
+  WORK=$SCRATCH
+fi
+export WORK
+
+git clone https://github.com/StormSurgeLive/asgs.git  $SCRIPTDIR && cd $SCRIPTDIR&& git checkout master
 
 # assume 'asgs' user is the only "ASGS" user on the system, if this is not
 # sufficient please let us know ...
 
-export WORK=$HOME/work
-export SCRATCH=$WORK
-cd $HOME/asgs
+cd $SCRIPTDIR
+
+./init-asgs.sh -x "--update-shell"
+if [ $? != 0 ]; then
+  exit 1
+fi
 
 ./init-asgs.sh -b -x "--run-steps openmpi"         || echo openmpi         - something went wonky but preserving docker image
 if [ $? != 0 ]; then
@@ -116,8 +137,8 @@ if [ $? != 0 ]; then
 fi
 
 # final pass to ensure files are owned by the asgs 
-cp $HOME/asgs/cloud/VirtualBox/oracle-linux-8.7/default.asgs-global.conf $HOME/asgs-global.conf
-cp $HOME/asgs/cloud/VirtualBox/oracle-linux-8.7/dot.tmux.conf $HOME/.tmux.conf
+cp $SCRIPTDIR/cloud/VirtualBox/oracle-linux-8.7/default.asgs-global.conf $HOME/asgs-global.conf
+cp $SCRIPTDIR/cloud/VirtualBox/oracle-linux-8.7/dot.tmux.conf $HOME/.tmux.conf
 
 chmod 600 $HOME/asgs-global.conf
 
@@ -130,5 +151,12 @@ Next steps:
 2. ./asgsh
 3. ... use ASGS as expected - maybe try to compile ADCIRC with 'build adcirc'
 
-(please report bugs or surprising behavior)
+Please report bugs or surprising behavior:
+
+  https://github.com/StormSurgeLive/asgs/issues
+  
+or email:
+
+  bugs@asgs.sh
+
 EOF
