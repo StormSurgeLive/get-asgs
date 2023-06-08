@@ -9,36 +9,42 @@ assert_system_req
 
 echo
 read -p "This script downloads and installs ASGS after getting some more info from you. Continue [y/N]? " continue
+echo
 if [[ -z "$continue" || "$continue" == "N" ]]; then
   echo ASGS bootstrap cancelled.
   exit 1
 fi
-echo
 
 _SCRIPTDIR=$HOME/asgs
 read -p "Where do you want to install ASGS [$_SCRIPTDIR]? " SCRIPTDIR 
+echo
 if [ -z "$SCRIPTDIR" ]; then
   SCRIPTDIR=$_SCRIPTDIR
 fi
 export SCRIPTDIR
-echo
 
 _SCRATCH=$HOME/scratch
 read -p "Enter in path to your SCRATCH directory [$_SCRATCH]: " SCRATCH 
+echo
 if [ -z "$SCRATCH" ]; then
   SCRATCH=$_SCRATCH
 fi
 export SCRATCH
-echo
 
 read -p "Enter in path to your WORK directory [$SCRATCH]: " WORK
+echo
 if [ -z "$WORK" ]; then
   WORK=$SCRATCH
 fi
 export WORK
-echo
 
-git clone https://github.com/StormSurgeLive/asgs.git  $SCRIPTDIR && cd $SCRIPTDIR&& git checkout master
+read -p "Git branch of ASGS (<enter> if you don't know) [master]? " BRANCH
+echo
+if [ -z "$BRANCH" ]; then
+  BRANCH=master
+fi
+
+git clone https://github.com/StormSurgeLive/asgs.git  $SCRIPTDIR && cd $SCRIPTDIR&& git checkout $BRANCH 
 
 # assume 'asgs' user is the only "ASGS" user on the system, if this is not
 # sufficient please let us know ...
