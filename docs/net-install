@@ -13,6 +13,7 @@ if [[ -z "$continue" || "$continue" == "N" ]]; then
   echo ASGS bootstrap cancelled.
   exit 1
 fi
+echo
 
 _SCRIPTDIR=$HOME/asgs
 read -p "Where do you want to install ASGS [$_SCRIPTDIR]? " SCRIPTDIR 
