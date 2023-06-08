@@ -20,6 +20,7 @@ if [ -z "$SCRIPTDIR" ]; then
   SCRIPTDIR=$_SCRIPTDIR
 fi
 export SCRIPTDIR
+echo
 
 _SCRATCH=$HOME/scratch
 read -p "Enter in path to your SCRATCH directory [$_SCRATCH]: " SCRATCH 
@@ -27,12 +28,14 @@ if [ -z "$SCRATCH" ]; then
   SCRATCH=$_SCRATCH
 fi
 export SCRATCH
+echo
 
 read -p "Enter in path to your WORK directory [$SCRATCH]: " WORK
 if [ -z "$WORK" ]; then
   WORK=$SCRATCH
 fi
 export WORK
+echo
 
 git clone https://github.com/StormSurgeLive/asgs.git  $SCRIPTDIR && cd $SCRIPTDIR&& git checkout master
 
