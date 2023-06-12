@@ -8,35 +8,36 @@ assert_system_req() {
 assert_system_req
 
 echo
-read -p "This script downloads and installs ASGS after getting some more info from you. Continue [y/N]? " continue
+read -p "This script downloads and installs ASGS after getting some more info from you. Continue [Y/n]? " continue
 echo
-if [[ -z "$continue" || "$continue" == "N" ]]; then
+if [[ -n "$continue" && "$continue" != "Y" ]]; then
   echo ASGS bootstrap cancelled.
   exit 1
 fi
 
-_SCRIPTDIR=$HOME/asgs
-read -p "Where do you want to install ASGS [$_SCRIPTDIR]? " SCRIPTDIR 
-echo
-if [ -z "$SCRIPTDIR" ]; then
-  SCRIPTDIR=$_SCRIPTDIR
-fi
-export SCRIPTDIR
-
-_SCRATCH=$HOME/scratch
-read -p "Enter in path to your SCRATCH directory [$_SCRATCH]: " SCRATCH 
+_SCRATCH=${SCRATCH:-$HOME/scratch}
+read -p "Enter in the FULL path to your SCRATCH directory [$_SCRATCH]: " SCRATCH 
 echo
 if [ -z "$SCRATCH" ]; then
   SCRATCH=$_SCRATCH
 fi
 export SCRATCH
 
-read -p "Enter in path to your WORK directory [$SCRATCH]: " WORK
+_WORK=${WORK:-$HOME/work}
+read -p "Enter in the FULL path to your WORK directory [$_WORK]: " WORK
 echo
 if [ -z "$WORK" ]; then
-  WORK=$SCRATCH
+  WORK=$_WORK
 fi
 export WORK
+
+_SCRIPTDIR=${WORK:-$HOME}/asgs
+read -p "Where do you want to install ASGS [$_SCRIPTDIR]? " SCRIPTDIR 
+echo
+if [ -z "$SCRIPTDIR" ]; then
+  SCRIPTDIR=$_SCRIPTDIR
+fi
+export SCRIPTDIR
 
 read -p "Git branch of ASGS (<enter> if you don't know) [master]? " BRANCH
 echo
